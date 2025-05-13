@@ -4,3 +4,12 @@ main: fr.bilscript.bilzerShop.BilzerShop
 api-version: '1.20'
 load: STARTUP
 authors: [ Bilskoww ]
+
+commands:
+  eco:
+    description: eco cmd
+    aliases:
+      - money
+      - economy
+    permission: bilzershop.admin
+    permission-message: bouffon va
