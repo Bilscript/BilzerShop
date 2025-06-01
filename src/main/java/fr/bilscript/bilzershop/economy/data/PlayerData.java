@@ -1,4 +1,4 @@
-package fr.bilscript.bilzerShop.economy.data;
+package fr.bilscript.bilzershop.economy.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class PlayerData {
-	private  final UUID uuid;
+	private final UUID uuid;
 	private int balance;
 
 	public PlayerData(UUID uuid, int account) {
@@ -19,7 +19,7 @@ public class PlayerData {
 		this.balance = 0;
 	}
 
-	public Player getPlayer(){
+	public Player getPlayer() {
 		return Bukkit.getPlayer(uuid);
 	}
 

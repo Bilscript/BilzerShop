@@ -1,6 +1,6 @@
 name: BilzerShop
 version: '1.0-SNAPSHOT'
-main: fr.bilscript.bilzerShop.BilzerShop
+main: fr.bilscript.bilzershop.BilzerShop
 api-version: '1.20'
 load: STARTUP
 authors: [ Bilskoww ]
@@ -11,5 +11,7 @@ commands:
     aliases:
       - money
       - economy
-    permission: bilzershop.admin
-    permission-message: bouffon va
+    #permission: bilzershop.admin
+    #permission-message: bouffon va
+  pay:
+    description: pay pr payer abuse zinc reflechi

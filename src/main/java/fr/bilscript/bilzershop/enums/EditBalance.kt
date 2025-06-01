@@ -1,4 +1,4 @@
-package fr.bilscript.bilzerShop.enum
+package fr.bilscript.bilzershop.enums
 
 enum class EditBalance {
     ADD,

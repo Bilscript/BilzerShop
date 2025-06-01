@@ -1,4 +1,4 @@
-package fr.bilscript.bilzerShop.commands;
+package fr.bilscript.bilzershop.commands;
 
 public class ShopCommand {
 
