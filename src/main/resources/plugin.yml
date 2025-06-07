@@ -15,3 +15,5 @@ commands:
     #permission-message: bouffon va
   pay:
     description: pay pr payer abuse zinc reflechi
+  shop:
+    description: pour achetar

@@ -5,3 +5,22 @@ mysql:
   user: root
   password: ""
   pool-size: 5
+inventory:
+  title: "BilzerShop"
+  size: 54
+  items:
+    1:
+      material: EMERALD
+      amount: 3
+      buy-price: 23000
+      sell-price: 12000
+    2:
+      material: GRASS_BLOCK
+      amount: 5
+      buy-price: 500
+      sell-price: 250
+    3:
+      material: IRON_SWORD
+      amount: 1
+      buy-price: 1200
+      sell-price: 500
