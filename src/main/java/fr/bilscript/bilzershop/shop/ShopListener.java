@@ -22,7 +22,6 @@ public class ShopListener implements Listener {
 		Player player = (Player) event.getWhoClicked();
 		Inventory inv = event.getView().getTopInventory();
 
-		// Vérifie si on est dans le menu principal
 		if (inv.getHolder() instanceof MainMenu) {
 			event.setCancelled(true);
 			ItemStack clicked = event.getCurrentItem();
@@ -33,13 +32,16 @@ public class ShopListener implements Listener {
 			if (name.equals("§aAcheter des objets")) {
 				BuyMenu.open(player);
 			} else if (name.equals("§cVendre des objets")) {
-				SellMenu.sellItem(player);
+				SellMenu.open(player);
 			}
 		}
 		if (inv.getHolder() instanceof BuyMenu){
 			event.setCancelled(true);
 			BuyMenu.buyItem(manager.getPlayerData(player) ,event.getSlot());
 		}
-
+		if (inv.getHolder() instanceof SellMenu){
+			event.setCancelled(true);
+			SellMenu.sellItem(manager.getPlayerData(player) ,event.getSlot());
+		}
 	}
 }

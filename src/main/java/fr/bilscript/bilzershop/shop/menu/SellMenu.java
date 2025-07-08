@@ -5,6 +5,7 @@ import fr.bilscript.bilzershop.config.inventory.InventorySection;
 import fr.bilscript.bilzershop.config.inventory.ItemSection;
 import fr.bilscript.bilzershop.economy.data.PlayerData;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -21,7 +22,7 @@ public class SellMenu implements InventoryHolder {
 	private final Inventory inventory;
 	private static InventorySection inventorySection;
 
-	public SellMenu(Inventory inventory) {
+	public SellMenu() {
 		this.inventorySection = BilzerShop.getInstance().getConfiguration().getInventorySection();
 		List<ItemSection> items = inventorySection.items();
 
@@ -44,20 +45,38 @@ public class SellMenu implements InventoryHolder {
 	}
 
 	public static void sellItem(PlayerData player, int key) {
+
 		List<ItemSection> items = inventorySection.items();
 		if (key >= items.size())
 			return;
 		ItemSection itemSection = items.get(key);
+		Material material = itemSection.material();
+		PlayerInventory inv = player.getPlayer().getInventory();
+
+		int totalSold = 0;
 		if (itemSection == null)
 			return;
-		PlayerInventory invPlayer = player.getPlayer().getInventory();
-		for (int i = 0; i < invPlayer.getSize(); i++){
-
+		for (int i = 0; i < inv.getSize(); i++) {
+			ItemStack stack = inv.getItem(i);
+			if (stack != null && stack.getType() == material) {
+				totalSold += stack.getAmount();
+				inv.setItem(i, null);
+			}
 		}
+		if (totalSold == 0){
+			player.getPlayer().sendMessage("Tu dois avoir cette item dans ton inventaire pour le vendre!");
+			return;
+		}
+		int amountItem = totalSold;
+		totalSold *= itemSection.sellPrice();
+		player.setBalance(player.getBalance() + totalSold);
+		player.getPlayer().sendMessage("§Vous avez vendue " + amountItem + " " + itemSection.material().toString().toLowerCase() + " pour " + totalSold + "$ !");
 	}
-
 	@Override
 	public @NotNull Inventory getInventory() {
-		return null;
+		return inventory;
+	}
+	public static void open(Player player){
+		player.openInventory(new SellMenu().getInventory());
 	}
 }
