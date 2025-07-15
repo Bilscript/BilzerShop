@@ -4,13 +4,10 @@ import fr.bilscript.bilzershop.commands.EconomyCommand;
 import fr.bilscript.bilzershop.commands.PayCommand;
 import fr.bilscript.bilzershop.commands.ShopCommand;
 import fr.bilscript.bilzershop.config.Config;
-import fr.bilscript.bilzershop.config.inventory.InventorySection;
 import fr.bilscript.bilzershop.database.Database;
 import fr.bilscript.bilzershop.economy.EconomyManager;
-import fr.bilscript.bilzershop.economy.data.PlayerDataRepository;
-import fr.bilscript.bilzershop.shop.ShopItem;
 import fr.bilscript.bilzershop.shop.ShopListener;
-import fr.bilscript.bilzershop.shop.ShopManager;
+import fr.bilscript.bilzershop.task.SaveTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,22 +17,20 @@ public final class BilzerShop extends JavaPlugin{
 	private EconomyManager economyManager;
 	private Config config;
 	private Database database;
-	private ShopManager shopManager;
 
 	@Override
 	public void onEnable() {
 		instance = this;
 		reload();
-		this.shopManager = new ShopManager();
 		this.database = new Database(config.getDatabaseSection());
-		PlayerDataRepository repository = new PlayerDataRepository(database);
-		this.economyManager = new EconomyManager(repository);
+		this.economyManager = new EconomyManager();
 		Bukkit.getPluginManager().registerEvents(new ShopListener(), this);
 
 		getCommand("eco").setExecutor(new EconomyCommand());
 		getCommand("pay").setExecutor(new PayCommand());
 		getCommand("shop").setExecutor(new ShopCommand());
 
+		new SaveTask(this);
 	}
 
 	@Override
@@ -43,9 +38,6 @@ public final class BilzerShop extends JavaPlugin{
 		System.out.println("Le Plugin est desactivé 😭!!");
 	}
 
-	public ShopManager getShopManager() {
-		return shopManager;
-	}
 
 	public EconomyManager getEconomyManager() {
 		return this.economyManager;

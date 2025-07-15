@@ -16,14 +16,10 @@ public class MainMenu implements InventoryHolder {
 		this.inventory = Bukkit.createInventory(this, 9, "§6§lBilzerShop");
 
 		ItemStack buy = new ItemStack(Material.BARREL);
-		ItemMeta buyMeta = buy.getItemMeta();
-		buyMeta.setDisplayName("§aAcheter des objets");
-		buy.setItemMeta(buyMeta);
+		buy.editMeta(meta -> meta.setDisplayName("§aAcheter des objets"));
 
 		ItemStack sell = new ItemStack(Material.REDSTONE);
-		ItemMeta sellMeta = sell.getItemMeta();
-		sellMeta.setDisplayName("§cVendre des objets");
-		sell.setItemMeta(sellMeta);
+		sell.editMeta(meta -> meta.setDisplayName("§cVendre des objets"));
 
 		inventory.setItem(3, buy);
 		inventory.setItem(5, sell);

@@ -17,6 +17,7 @@ import java.util.List;
 public class EconomyCommand implements CommandExecutor, TabCompleter {
 
 	private static final List<String> PARAMETERS = List.of("add", "remove", "set", "get");
+	private static final String INVALID_MESSAGE = "Somme invalide ! Le montant doit etre un nombre entier positif.";
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
@@ -24,7 +25,7 @@ public class EconomyCommand implements CommandExecutor, TabCompleter {
 			return true;
 
 		EconomyManager manager = BilzerShop.getInstance().getEconomyManager();
-		PlayerData playerData = manager.getPlayerData((Player) sender);
+		PlayerData playerData = manager.getPlayerData(player);
 
 		if (args.length == 0) {
 			player.sendMessage("Votre solde actuel est de " + playerData.getBalance() + "$.");
@@ -42,80 +43,15 @@ public class EconomyCommand implements CommandExecutor, TabCompleter {
 			player.sendMessage("Tu n'as pas la permission d'utiliser cette commande.");
 			return true;
 		}
-		String invalidArg = "Somme invalide ! Le montant doit etre un nombre entier positif.";
 		switch (args[0].toLowerCase()) {
 			case "add":
-				if (args.length != 3) {
-					player.sendMessage("Utilisation : /eco add <joueur> <montant>");
-					return true;
-				}
-				PlayerData dataAdd = manager.getPlayerData(Bukkit.getPlayer(args[1]));
-				if (dataAdd == null) {
-					player.sendMessage("Joueur introuvable.");
-					return true;
-				}
-				int amountAdd = 0;
-				try {
-					amountAdd = Integer.parseInt(args[2]);
-					if (amountAdd < 0) {
-						player.sendMessage(invalidArg);
-						return true;
-					}
-				} catch (NumberFormatException e) {
-					player.sendMessage(invalidArg);
-					return true;
-				}
-				manager.add(dataAdd, amountAdd);
-				player.sendMessage("Vous avez ajouté " + amountAdd + "$ à " + dataAdd.getPlayer().getName() + ".");
+				this.modifyValue(args, player, ActionType.ADD);
 				break;
-
 			case "remove":
-				if (args.length != 3) {
-					player.sendMessage("Utilisation : /eco remove <joueur> <montant>");
-					return true;
-				}
-				PlayerData dataRemove = manager.getPlayerData(Bukkit.getPlayer(args[1]));
-				if (dataRemove == null) {
-					player.sendMessage("Joueur introuvable.");
-					return true;
-				}
-				int amountRemove = 0;
-				try {
-					amountRemove = Integer.parseInt(args[2]);
-					if (amountRemove < 0) {
-						player.sendMessage(invalidArg);
-						return true;
-					}
-				} catch (NumberFormatException e) {
-					player.sendMessage(invalidArg);
-					return true;
-				}
-				manager.remove(dataRemove, amountRemove);
-				player.sendMessage("Vous avez retiré " + amountRemove + "$ à " + dataRemove.getPlayer().getName() + ".");
+				this.modifyValue(args, player, ActionType.REMOVE);
 				break;
 			case "set":
-				if (args.length != 3) {
-					player.sendMessage("Utilisation : /eco set <joueur> <montant>");
-					return true;
-				}
-				PlayerData dataSet = manager.getPlayerData(Bukkit.getPlayer(args[1]));
-				if (dataSet == null) {
-					player.sendMessage("Joueur introuvable.");
-					return true;
-				}
-				int amountSet = 0;
-				try {
-					amountSet = Integer.parseInt(args[2]);
-					if (amountSet < 0) {
-						player.sendMessage(invalidArg);
-						return true;
-					}
-				} catch (NumberFormatException e) {
-					player.sendMessage(invalidArg);
-					return true;
-				}
-				manager.set(dataSet, amountSet);
-				player.sendMessage(dataSet.getPlayer().getName() + " à maintenant " + amountSet + "$.");
+				this.modifyValue(args, player, ActionType.SET);
 				break;
 			case "get":
 				if (args.length != 2) {
@@ -143,5 +79,55 @@ public class EconomyCommand implements CommandExecutor, TabCompleter {
 		if (args.length == 3 && List.of("add", "remove", "set").contains(args[0]))
 			return List.of("<Montant>");
 		return List.of();
+	}
+
+
+	private void modifyValue(final String[] args, final Player player, final ActionType type) {
+		final EconomyManager manager = BilzerShop.getInstance().getEconomyManager();
+
+		if (args.length != 3) {
+			player.sendMessage("Utilisation : /eco " + type.getArg() + " <joueur> <montant>");
+			return;
+		}
+		PlayerData data = manager.getPlayerData(Bukkit.getPlayer(args[1]));
+		if (data == null) {
+			player.sendMessage("Joueur introuvable.");
+			return;
+		}
+		int amount;
+		try {
+			amount = Integer.parseInt(args[2]);
+			if (amount < 0) {
+				player.sendMessage(INVALID_MESSAGE);
+				return;
+			}
+		} catch (NumberFormatException e) {
+			player.sendMessage(INVALID_MESSAGE);
+			return;
+		}
+		if (type == ActionType.ADD) {
+			manager.add(data, amount);
+			player.sendMessage("Vous avez ajouté " + amount + "$ à " + args[1] + ".");
+		} else if(type == ActionType.REMOVE) {
+			manager.remove(data, amount);
+			player.sendMessage("Vous avez retiré " + amount + "$ à " + args[1] + ".");
+		} else {
+			manager.set(data, amount);
+			player.sendMessage(args[1] + " a maintenant " + amount + "$.");
+		}
+	}
+
+	private enum ActionType {
+		ADD("add"), REMOVE("remove"), SET("set");
+
+		private final String arg;
+
+		ActionType(final String arg) {
+			this.arg = arg;
+		}
+
+		public String getArg() {
+			return this.arg;
+		}
 	}
 }

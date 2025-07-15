@@ -16,7 +16,7 @@ import java.util.List;
 
 public class PayCommand implements CommandExecutor, TabCompleter {
 
-	private static final List<String> PARAMETERS = List.of("<Joueur>");
+	private static final String INVALID_MESSAGE = "Somme invalide ! Le montant doit etre un nombre entier positif.";
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
@@ -24,7 +24,7 @@ public class PayCommand implements CommandExecutor, TabCompleter {
 			return true;
 
 		EconomyManager manager = BilzerShop.getInstance().getEconomyManager();
-		PlayerData playerData = manager.getPlayerData((Player) sender);
+		PlayerData playerData = manager.getPlayerData(player);
 		if (args.length != 2) {
 			sender.sendMessage("Utilisation : /pay <joueur> <montant>");
 			return false;
@@ -34,16 +34,16 @@ public class PayCommand implements CommandExecutor, TabCompleter {
 			sender.sendMessage("Joueur introuvable");
 			return false;
 		}
-		String invalidArg = "Somme invalide ! Le montant doit etre un nombre entier positif.";
-		int amountAdd = 0;
+
+		int amountAdd;
 		try {
 			amountAdd = Integer.parseInt(args[1]);
 			if (amountAdd < 0) {
-				player.sendMessage(invalidArg);
+				player.sendMessage(INVALID_MESSAGE);
 				return true;
 			}
 		} catch (NumberFormatException e) {
-			player.sendMessage(invalidArg);
+			player.sendMessage(INVALID_MESSAGE);
 			return true;
 		}
 		manager.pay(playerData, target, amountAdd);

@@ -15,16 +15,4 @@ public record DatabaseSection(String host, int port, String database, String use
 
         return new DatabaseSection(host, port, database, user, password, poolSize);
     }
-
-    @Override
-    public String toString() {
-        return "DatabaseSection{" +
-                "host='" + host + '\'' +
-                ", port=" + port +
-                ", database='" + database + '\'' +
-                ", user='" + user + '\'' +
-                ", password='" + password + '\'' +
-                ", poolSize=" + poolSize +
-                '}';
-    }
 }

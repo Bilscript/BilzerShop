@@ -35,13 +35,13 @@ public class ShopListener implements Listener {
 				SellMenu.open(player);
 			}
 		}
-		if (inv.getHolder() instanceof BuyMenu){
+		if (inv.getHolder() instanceof BuyMenu menu){
 			event.setCancelled(true);
-			BuyMenu.buyItem(manager.getPlayerData(player) ,event.getSlot());
+			menu.buyItem(manager.getPlayerData(player) ,event.getSlot());
 		}
-		if (inv.getHolder() instanceof SellMenu){
+		if (inv.getHolder() instanceof SellMenu menu){
 			event.setCancelled(true);
-			SellMenu.sellItem(manager.getPlayerData(player) ,event.getSlot());
+			menu.sellItem(manager.getPlayerData(player) ,event.getSlot());
 		}
 	}
 }

@@ -20,8 +20,6 @@ public class Config {
 		return inventorySection;
 	}
 
-
-
 	public DatabaseSection getDatabaseSection() {
 		return databaseSection;
 	}

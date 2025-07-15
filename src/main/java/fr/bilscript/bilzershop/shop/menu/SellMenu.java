@@ -20,31 +20,31 @@ import java.util.List;
 public class SellMenu implements InventoryHolder {
 
 	private final Inventory inventory;
-	private static InventorySection inventorySection;
+	private final InventorySection inventorySection;
 
 	public SellMenu() {
 		this.inventorySection = BilzerShop.getInstance().getConfiguration().getInventorySection();
 		List<ItemSection> items = inventorySection.items();
-
 		this.inventory = Bukkit.createInventory(this, inventorySection.size(), inventorySection.title());
+
 		for (int i = 0; i < items.size(); i++) {
 			ItemSection item = items.get(i);
-			ItemStack itemStack = new ItemStack(item.material(), item.amount());
-			ItemMeta itemMeta = itemStack.getItemMeta();
 
-			if (itemMeta == null) {
-				itemMeta.setDisplayName("§e" + item.material().name());
-				ArrayList<String> lore = new ArrayList<>();
-				lore.add("§aPrix de rachat : " + item.sellPrice() + "$");
-				lore.add("§7Clique pour vendre!");
-				itemMeta.setLore(lore);
-				itemStack.setItemMeta(itemMeta);
+			ItemStack stack = new ItemStack(item.material(), item.amount());
+			ItemMeta meta = stack.getItemMeta();
+			if (meta != null) {
+				meta.setDisplayName("§e" + item.material().name());
+				List<String> lore = new ArrayList<>();
+				lore.add("§aPrix de vente : " + item.sellPrice() + "$");
+				lore.add("§7Clique pour vendre !");
+				meta.setLore(lore);
+				stack.setItemMeta(meta);
 			}
-			inventory.setItem(i, itemStack);
+			inventory.setItem(i, stack);
 		}
 	}
 
-	public static void sellItem(PlayerData player, int key) {
+	public void sellItem(PlayerData player, int key) {
 
 		List<ItemSection> items = inventorySection.items();
 		if (key >= items.size())

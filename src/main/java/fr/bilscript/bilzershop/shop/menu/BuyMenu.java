@@ -20,7 +20,7 @@ import java.util.List;
 public class BuyMenu implements InventoryHolder {
 
 	private final Inventory inventory;
-	private static InventorySection inventorySection;
+	private final InventorySection inventorySection;
 
 	public BuyMenu() {
 		this.inventorySection = BilzerShop.getInstance().getConfiguration().getInventorySection();
@@ -45,7 +45,7 @@ public class BuyMenu implements InventoryHolder {
 		}
 	}
 
-	public static void buyItem(PlayerData player, int key){
+	public void buyItem(PlayerData player, int key){
 		List<ItemSection> items = inventorySection.items();
 		if (key >= items.size())
 			return;
@@ -54,11 +54,10 @@ public class BuyMenu implements InventoryHolder {
 			return;
 		int amount = itemSection.amount();
 		if (player.getBalance() < itemSection.buyPrice()){
-			player.getPlayer().sendMessage("§cTu est pauvre, tu n'a pas assez d'argent.");
+			player.getPlayer().sendMessage("§cTu est pauvre, tu n'as pas assez d'argent.");
 			return;
 		}
-		if (itemSection == null)
-			return;
+
 		HashMap<Integer, ItemStack> itemLeft;
 		itemLeft = player.getPlayer().getInventory().addItem(new ItemStack(itemSection.material(), amount));
 		if (itemLeft.isEmpty()){

@@ -10,7 +10,7 @@ public class ShopCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 		if (!(sender instanceof Player player)) return false;
-		new MainMenu().open(player);
+		MainMenu.open(player);
 		return true;
 	}
 }
