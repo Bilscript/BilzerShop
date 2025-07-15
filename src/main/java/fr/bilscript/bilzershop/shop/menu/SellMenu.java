@@ -31,15 +31,13 @@ public class SellMenu implements InventoryHolder {
 			ItemSection item = items.get(i);
 
 			ItemStack stack = new ItemStack(item.material(), item.amount());
-			ItemMeta meta = stack.getItemMeta();
-			if (meta != null) {
+			stack.editMeta(meta -> {
 				meta.setDisplayName("§e" + item.material().name());
 				List<String> lore = new ArrayList<>();
 				lore.add("§aPrix de vente : " + item.sellPrice() + "$");
 				lore.add("§7Clique pour vendre !");
 				meta.setLore(lore);
-				stack.setItemMeta(meta);
-			}
+			});
 			inventory.setItem(i, stack);
 		}
 	}
@@ -70,7 +68,8 @@ public class SellMenu implements InventoryHolder {
 		int amountItem = totalSold;
 		totalSold *= itemSection.sellPrice();
 		player.setBalance(player.getBalance() + totalSold);
-		player.getPlayer().sendMessage("§Vous avez vendue " + amountItem + " " + itemSection.material().toString().toLowerCase() + " pour " + totalSold + "$ !");
+		player.getPlayer().sendMessage("§cVous avez vendue " + amountItem + " " + itemSection.material().toString().toLowerCase() + " pour " + totalSold + "$ !");
+		player.getPlayer().sendMessage("Nouveau solde : " + player.getBalance() + "$");
 	}
 	@Override
 	public @NotNull Inventory getInventory() {

@@ -32,15 +32,13 @@ public class BuyMenu implements InventoryHolder {
 			ItemSection item = items.get(i);
 
 			ItemStack stack = new ItemStack(item.material(), item.amount());
-			ItemMeta meta = stack.getItemMeta();
-			if (meta != null) {
+			stack.editMeta(meta -> {
 				meta.setDisplayName("§e" + item.material().name());
 				List<String> lore = new ArrayList<>();
 				lore.add("§aPrix d'achat : " + item.buyPrice() + "$");
 				lore.add("§7Clique pour acheter !");
 				meta.setLore(lore);
-				stack.setItemMeta(meta);
-			}
+			});
 			inventory.setItem(i, stack);
 		}
 	}
@@ -61,8 +59,11 @@ public class BuyMenu implements InventoryHolder {
 		HashMap<Integer, ItemStack> itemLeft;
 		itemLeft = player.getPlayer().getInventory().addItem(new ItemStack(itemSection.material(), amount));
 		if (itemLeft.isEmpty()){
-			player.getPlayer().sendMessage("§Vous avez achete " + amount + " " + itemSection.material().toString().toLowerCase() + "!");
-			BilzerShop.getInstance().getEconomyManager().remove(player , (int) itemSection.buyPrice());
+			player.getPlayer().sendMessage("§aVous avez achete " + amount + " " + itemSection.material().toString().toLowerCase() + " a " + itemSection.buyPrice() + "$ !");
+			int currentBalance = player.getBalance();
+			int res = (int) Math.max(0, currentBalance - (itemSection.buyPrice()));
+			player.setBalance(res);
+			player.getPlayer().sendMessage("Nouveau solde : " + player.getBalance() + "$");
 		}
 		else
 			player.getPlayer().sendMessage("§cTon inventaire est plein!");

@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 public class ShopListener implements Listener {
 
@@ -27,11 +29,11 @@ public class ShopListener implements Listener {
 			ItemStack clicked = event.getCurrentItem();
 			if (clicked == null || !clicked.hasItemMeta()) return;
 
-			String name = clicked.getItemMeta().getDisplayName();
-
-			if (name.equals("§aAcheter des objets")) {
+			final ItemMeta meta = clicked.getItemMeta();
+			final PersistentDataContainer container = meta.getPersistentDataContainer();
+			if (container.has(MainMenu.BUY_KEY)) {
 				BuyMenu.open(player);
-			} else if (name.equals("§cVendre des objets")) {
+			} else if (container.has(MainMenu.SELL_KEY)) {
 				SellMenu.open(player);
 			}
 		}

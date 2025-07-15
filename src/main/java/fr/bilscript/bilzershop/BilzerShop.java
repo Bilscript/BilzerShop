@@ -21,7 +21,7 @@ public final class BilzerShop extends JavaPlugin{
 	@Override
 	public void onEnable() {
 		instance = this;
-		reload();
+		this. reload();
 		this.database = new Database(config.getDatabaseSection());
 		this.economyManager = new EconomyManager();
 		Bukkit.getPluginManager().registerEvents(new ShopListener(), this);
@@ -32,12 +32,6 @@ public final class BilzerShop extends JavaPlugin{
 
 		new SaveTask(this);
 	}
-
-	@Override
-	public void onDisable() {
-		System.out.println("Le Plugin est desactivé 😭!!");
-	}
-
 
 	public EconomyManager getEconomyManager() {
 		return this.economyManager;
