@@ -1,6 +1,6 @@
 # BilzerShop
 
-**BilzerShop** est un plugin Minecraft permettant aux joueurs d’acheter et de vendre des objets via une interface graphique.
+**BilzerShop** est un plugin Minecraft en 1.20.4 permettant aux joueurs d’acheter et de vendre des objets via une interface graphique.
 
 ## Fonctionnalités
 
